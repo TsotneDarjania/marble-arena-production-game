@@ -170,31 +170,14 @@ export class Penalty {
     ) as CanvasScene;
     canvasScene.showMarbleArenaLogo();
 
-    this.match.scene.tweens.add({
-      targets: [bg],
-      alpha: 1,
-      duration: 500,
-      onComplete: () => {
-        this.match.stadium.stopGoalSelebration();
-        this.match.matchManager.matchEvenetManager.resumeUfterFreeKick(
-          this.whoIsGulity,
-          this.wasGoalScored
-        );
+    setTimeout(() => {
+      this.match.stadium.stopGoalSelebration();
+      this.match.matchManager.matchEvenetManager.resumeUfterFreeKick(
+        this.whoIsGulity,
+        this.wasGoalScored
+      );
 
-        this.shooterFootballer.destroy();
-
-        setTimeout(() => {
-          this.match.scene.tweens.add({
-            targets: bg,
-            alpha: 0,
-            delay: 300,
-            duration: 500,
-            onComplete: () => {
-              bg.destroy();
-            },
-          });
-        }, 300);
-      },
-    });
+      this.shooterFootballer.destroy();
+    }, 500);
   }
 }

@@ -21,7 +21,7 @@ export default class CanvasScene extends Phaser.Scene {
   lastPenaltiesRightXPosition = 50;
 
   possibleToShowCommentatorTexrt = true;
-  indicatorsContainer:Phaser.GameObjects.Container;
+  indicatorsContainer: Phaser.GameObjects.Container;
 
   constructor() {
     super("CanvasScene");
@@ -194,6 +194,13 @@ export default class CanvasScene extends Phaser.Scene {
 
   // During Transitions
   showMarbleArenaLogo() {
+    const bg = this.add
+      .image(this.game.canvas.width / 2, this.game.canvas.height / 2, "default")
+      .setDepth(150)
+      .setTint(0x000000)
+      .setScale(100)
+      .setAlpha(0);
+
     const marbleArenaLogo = this.add
       .image(
         this.game.canvas.width / 2,
@@ -222,7 +229,26 @@ export default class CanvasScene extends Phaser.Scene {
               marbleArenaLogo.destroy();
             },
           });
-        }, 300);
+        }, 1000);
+      },
+    });
+
+    this.tweens.add({
+      targets: bg,
+      alpha: 1,
+      duration: 500,
+      onComplete: () => {
+        setTimeout(() => {
+          this.tweens.add({
+            targets: bg,
+            alpha: 0,
+            delay: 300,
+            duration: 500,
+            onComplete: () => {
+              bg.destroy();
+            },
+          });
+        }, 1000);
       },
     });
   }
@@ -260,18 +286,16 @@ export default class CanvasScene extends Phaser.Scene {
   createIndicators() {
     this.indicatorsContainer = this.add.container();
     // Background
-    const bck =  this.add
+    const bck = this.add
       .image(this.game.canvas.width / 2, 60, "matchIndicatorBck")
       .setTint(0x02010d)
       .setAlpha(0);
-   
-    
+
     this.timerText = this.add.text(this.game.canvas.width / 2, 83, "0", {
       fontSize: "25px",
       color: "#F3FFFF",
       align: "center",
       strokeThickness: 1,
-
     });
     this.timerText.setOrigin(0.5);
 
@@ -280,7 +304,6 @@ export default class CanvasScene extends Phaser.Scene {
       this.game.canvas.width / 2 - 158,
       56,
       matchDataConfig.hostTeamData.logoKey
-    
     );
 
     // guestTeamLogo
@@ -305,10 +328,9 @@ export default class CanvasScene extends Phaser.Scene {
         }
       )
       .setOrigin(0, 0.5);
-    
 
     //guestTeamInitials
-    const initials2 =  this.add
+    const initials2 = this.add
       .text(
         this.game.canvas.width / 2 + 120,
         60,
@@ -322,10 +344,9 @@ export default class CanvasScene extends Phaser.Scene {
         }
       )
       .setOrigin(1, 0.5);
-   
 
     // hostTeamScore
-    const score1 = this.hostTeamScoretext = this.add
+    const score1 = (this.hostTeamScoretext = this.add
       .text(this.game.canvas.width / 2 - 20, 60, "0", {
         fontSize: "45px",
         color: "#E9FFFF",
@@ -333,10 +354,9 @@ export default class CanvasScene extends Phaser.Scene {
         strokeThickness: 2,
         align: "right",
       })
-      .setOrigin(1, 0.5);
-    
+      .setOrigin(1, 0.5));
 
-      const score2 = this.guestTeamScoretext = this.add
+    const score2 = (this.guestTeamScoretext = this.add
       .text(this.game.canvas.width / 2 + 50, 60, "0", {
         fontSize: "45px",
         color: "#E9FFFF",
@@ -344,21 +364,29 @@ export default class CanvasScene extends Phaser.Scene {
         strokeThickness: 2,
         align: "left",
       })
-      .setOrigin(1, 0.5);
-    
+      .setOrigin(1, 0.5));
 
     // HorizontalLine
-    const midline =  this.add
+    const midline = this.add
       .image(this.game.canvas.width / 2, 60, "default")
       .setDisplaySize(20, 7);
 
-      this.indicatorsContainer.add([bck, midline, score1, score2, logo1, logo2, initials1, initials2, this.timerText])
-      this.indicatorsContainer.setScale(0.75)
-      this.indicatorsContainer.x += 40
-      this.indicatorsContainer.y += 57
+    this.indicatorsContainer.add([
+      bck,
+      midline,
+      score1,
+      score2,
+      logo1,
+      logo2,
+      initials1,
+      initials2,
+      this.timerText,
+    ]);
+    this.indicatorsContainer.setScale(0.75);
+    this.indicatorsContainer.x += 40;
+    this.indicatorsContainer.y += 57;
 
-      this.indicatorsContainer.setAlpha(0)
-
+    this.indicatorsContainer.setAlpha(0);
   }
 
   addIntroOverlay() {
@@ -519,7 +547,7 @@ export default class CanvasScene extends Phaser.Scene {
     }, 1500);
   }
 
-  showMatchIndicators(){
-    this.indicatorsContainer.setAlpha(1)
+  showMatchIndicators() {
+    this.indicatorsContainer.setAlpha(1);
   }
 }
